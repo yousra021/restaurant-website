@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title th:text="${config.restaurantName}">Accueil</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: #333;
+      }
+
+      header {
+        background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                    url('[[${config.bannerImageUrl}]]') center/cover;
+        color: white;
+        text-align: center;
+        padding: 100px 20px 60px;
+        position: relative;
+      }
+
+      .header-content h1 {
+        font-size: 3.5em;
+        margin-bottom: 20px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+      }
+
+      .header-content p {
+        font-size: 1.2em;
+        margin-bottom: 30px;
+        opacity: 0.9;
+      }
+
+      .banner {
+        width: 100%;
+        height: 400px;
+        object-fit: cover;
+        display: none;
+      }
+
+      .nav-links {
+        margin: 30px 0;
+      }
+
+      .nav-links a {
+        display: inline-block;
+        margin: 0 10px;
+        padding: 15px 25px;
+        background-color: [[${config.primaryColor}]];
+        color: white;
+        text-decoration: none;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      }
+
+      .nav-links a:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+      }
+
+      .main-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px 20px;
+      }
+
+      .info-section {
+        background: white;
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        margin-bottom: 40px;
+      }
+
+      .info-section h2 {
+        color: [[${config.primaryColor}]];
+        margin-bottom: 20px;
+        font-size: 2em;
+      }
+
+      .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        margin-top: 30px;
+      }
+
+      .info-item {
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 10px;
+        border-left: 4px solid [[${config.primaryColor}]];
+      }
+
+      .info-item h3 {
+        color: [[${config.primaryColor}]];
+        margin-bottom: 10px;
+      }
+
+      .reviews-section {
+        background: white;
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      }
+
+      .reviews-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+      }
+
+      .review-card {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 10px;
+        border: 1px solid #e9ecef;
+      }
+
+      .review-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+
+      .review-name {
+        font-weight: 600;
+        color: [[${config.primaryColor}]];
+      }
+
+      .review-rating {
+        color: #ffc107;
+        font-size: 1.2em;
+      }
+
+      .review-date {
+        font-size: 0.9em;
+        color: #6c757d;
+      }
+
+      .review-comment {
+        font-style: italic;
+        color: #495057;
+      }
+
+      .admin-link {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: [[${config.primaryColor}]];
+        color: white;
+        padding: 10px 15px;
+        border-radius: 25px;
+        text-decoration: none;
+        font-size: 0.9em;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+      }
+
+      .admin-link:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+      }
+
+      @media (max-width: 768px) {
+        .header-content h1 {
+          font-size: 2.5em;
+        }
+        
+        .nav-links a {
+          display: block;
+          margin: 10px 0;
+        }
+        
+        .info-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="header-content">
+        <h1 th:text="${config.restaurantName}">Nom du restaurant</h1>
+        <p>Découvrez notre cuisine d'exception</p>
+        
+        <div class="nav-links">
+          <a href="/carte">🍽️ Voir la carte</a>
+          <a href="/menus">📋 Nos menus</a>
+          <a href="/avis">⭐ Avis clients</a>
+        </div>
+      </div>
+    </header>
+
+    <div class="main-content">
+      <div class="info-section">
+        <h2>📍 Informations pratiques</h2>
+        <div class="info-grid">
+          <div class="info-item">
+            <h3>Adresse</h3>
+            <p th:text="${config.address}">Adresse du restaurant</p>
+          </div>
+          <div class="info-item">
+            <h3>Contact</h3>
+            <p th:text="${config.contactInfo}">Informations de contact</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="reviews-section" th:if="${recentReviews != null and !recentReviews.empty}">
+        <h2>⭐ Avis récents</h2>
+        <div class="reviews-grid">
+          <div class="review-card" th:each="review : ${recentReviews}">
+            <div class="review-header">
+              <span class="review-name" th:text="${review.name}">Nom</span>
+              <span class="review-rating">
+                <span th:each="i : ${#numbers.sequence(1, review.rating)}">★</span>
+                <span th:each="i : ${#numbers.sequence(review.rating + 1, 5)}">☆</span>
+              </span>
+            </div>
+            <div class="review-date" th:text="${#temporals.format(review.date, 'dd/MM/yyyy')}">Date</div>
+            <div class="review-comment" th:if="${review.comment}" th:text="${review.comment}">Commentaire</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <a href="/admin/login" class="admin-link">🔧 Administration</a>
+  </body>
+</html>

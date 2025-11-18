@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Accueil</title>
+  </head>
+  <body>
+    <h1>Bienvenue au restaurant</h1>
+
+    <h2>Laisser un avis</h2>
+    <form th:action="@{/review}" th:object="${review}" method="post">
+      <label>Nom :</label
+      ><input type="text" th:field="*{name}" required /><br />
+      <label>Email :</label><input type="email" th:field="*{email}" /><br />
+      <label>Note :</label>
+      <select th:field="*{rating}">
+        <option
+          th:each="i : ${#numbers.sequence(1,5)}"
+          th:value="${i}"
+          th:text="${i} + ' ★'"
+        ></option></select
+      ><br />
+      <label>Commentaire :</label><textarea th:field="*{comment}"></textarea
+      ><br />
+      <button type="submit">Envoyer</button>
+    </form>
+
+    <h2>Derniers avis</h2>
+    <div th:each="r : ${latestReviews}">
+      <p>
+        <strong th:text="${r.name}">Nom</strong> –
+        <p th:text="${r.date}"></p> 
+        <span th:text="${r.rating} + ' ★'">Note</span><br />
+        <span th:text="${r.comment}">Commentaire</span>
+      </p>
+    </div>
+  </body>
+</html>

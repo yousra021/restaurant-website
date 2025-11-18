@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Nos Menus</title>
+</head>
+<body>
+<h1>Nos Menus</h1>
+
+<th:block th:each="menu : ${menus}">
+    <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 20px;">
+        <h2 th:text="${menu.name}"></h2>
+        <p th:text="${menu.description}"></p>
+
+        <th:block th:each="section : ${menu.sections}">
+            <h3 th:text="${section.name}"></h3>
+            <ul>
+                <th:block th:each="dish : ${section.dishes}">
+                    <li>
+                        <strong th:text="${dish.name}"></strong> –
+                        <span th:text="${dish.price} + ' €'"></span><br/>
+                        <small th:text="${dish.description}"></small><br/>
+                        <span th:if="${dish.imagePath}">
+                            <img th:src="@{${dish.imagePath}}" alt="image" width="100"/>
+                        </span><br/><br/>
+                    </li>
+                </th:block>
+            </ul>
+        </th:block>
+    </div>
+</th:block>
+
+</body>
+</html>

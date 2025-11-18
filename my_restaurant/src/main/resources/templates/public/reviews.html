@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${config.restaurantName + ' - Avis clients'}">Avis clients</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+
+        header {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                        url('[[${config.bannerImageUrl}]]') center/cover;
+            color: white;
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .header-content h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .nav-links {
+            margin-top: 20px;
+        }
+
+        .nav-links a {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 10px 20px;
+            background-color: [[${config.primaryColor}]];
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background: [[${config.primaryColor}]];
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 40px;
+            margin-top: 20px;
+        }
+
+        .review-form {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            height: fit-content;
+        }
+
+        .review-form h2 {
+            color: [[${config.primaryColor}]];
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: [[${config.primaryColor}]];
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .rating-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .rating-stars {
+            display: flex;
+            gap: 5px;
+        }
+
+        .rating-stars input[type="radio"] {
+            display: none;
+        }
+
+        .rating-stars label {
+            font-size: 2em;
+            color: #ddd;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .rating-stars label:hover,
+        .rating-stars label:hover ~ label,
+        .rating-stars input[type="radio"]:checked ~ label {
+            color: #ffc107;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: [[${config.primaryColor}]];
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .reviews-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .reviews-section h2 {
+            color: [[${config.primaryColor}]];
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .reviews-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .review-card {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .review-card:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .review-info h3 {
+            color: [[${config.primaryColor}]];
+            margin-bottom: 5px;
+        }
+
+        .review-date {
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+
+        .review-rating {
+            color: #ffc107;
+            font-size: 1.2em;
+        }
+
+        .review-comment {
+            color: #495057;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        .no-reviews {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1 th:text="${config.restaurantName}">Nom du restaurant</h1>
+            <p>Avis de nos clients</p>
+            
+            <div class="nav-links">
+                <a href="/">🏠 Accueil</a>
+                <a href="/carte">🍽️ Carte</a>
+                <a href="/menus">📋 Menus</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <a href="/" class="back-link">← Retour à l'accueil</a>
+
+        <div class="content-grid">
+            <div class="review-form">
+                <h2>💬 Laisser un avis</h2>
+                <form method="post" action="/review">
+                    <div class="form-group">
+                        <label for="name">Nom *</label>
+                        <input type="text" id="name" name="name" required placeholder="Votre nom">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email (optionnel)</label>
+                        <input type="email" id="email" name="email" placeholder="votre@email.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Note *</label>
+                        <div class="rating-group">
+                            <div class="rating-stars">
+                                <input type="radio" id="star5" name="rating" value="5" required>
+                                <label for="star5">★</label>
+                                <input type="radio" id="star4" name="rating" value="4">
+                                <label for="star4">★</label>
+                                <input type="radio" id="star3" name="rating" value="3">
+                                <label for="star3">★</label>
+                                <input type="radio" id="star2" name="rating" value="2">
+                                <label for="star2">★</label>
+                                <input type="radio" id="star1" name="rating" value="1">
+                                <label for="star1">★</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="comment">Commentaire (optionnel)</label>
+                        <textarea id="comment" name="comment" placeholder="Partagez votre expérience..."></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn">📝 Publier mon avis</button>
+                </form>
+            </div>
+
+            <div class="reviews-section">
+                <h2>⭐ Avis clients</h2>
+                
+                <div th:if="${reviews.empty}" class="no-reviews">
+                    <h3>Aucun avis pour le moment</h3>
+                    <p>Soyez le premier à partager votre expérience !</p>
+                </div>
+
+                <div th:if="${!reviews.empty}" class="reviews-grid">
+                    <div th:each="review : ${reviews}" class="review-card">
+                        <div class="review-header">
+                            <div class="review-info">
+                                <h3 th:text="${review.name}">Nom du client</h3>
+                                <div class="review-date" th:text="${#temporals.format(review.date, 'dd/MM/yyyy')}">Date</div>
+                            </div>
+                            <div class="review-rating">
+                                <span th:each="i : ${#numbers.sequence(1, review.rating)}">★</span>
+                                <span th:each="i : ${#numbers.sequence(review.rating + 1, 5)}">☆</span>
+                            </div>
+                        </div>
+                        
+                        <div th:if="${review.comment}" class="review-comment" th:text="${review.comment}">
+                            Commentaire du client
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuration initiale - My Restaurant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 600px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        input[type="text"], input[type="password"], input[type="color"], input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus, input[type="password"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        input[type="color"] {
+            height: 50px;
+            cursor: pointer;
+        }
+
+        .error {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 5px;
+            display: block;
+        }
+
+        .success {
+            color: #27ae60;
+            font-size: 14px;
+            margin-top: 5px;
+            display: block;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        .password-requirements {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .password-requirements ul {
+            margin: 10px 0 0 20px;
+        }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+        <h1>🍽️ Configuration du Restaurant</h1>
+        
+        <form method="post" th:object="${config}" enctype="multipart/form-data">
+            
+            <div th:if="${passwordError}" class="error" th:text="${passwordError}"></div>
+            <div th:if="${error}" class="error" th:text="${error}"></div>
+            
+            <div class="form-group">
+                <label for="restaurantName">Nom du restaurant *</label>
+                <input type="text" id="restaurantName" th:field="*{restaurantName}" required 
+                       placeholder="Ex: Le Petit Bistrot">
+            </div>
+
+            <div class="form-group">
+                <label for="siteUrl">URL du site *</label>
+                <input type="text" id="siteUrl" th:field="*{siteUrl}" required 
+                       placeholder="https://monrestaurant.com">
+            </div>
+
+            <div class="form-group">
+                <label for="primaryColor">Couleur dominante</label>
+                <input type="color" id="primaryColor" th:field="*{primaryColor}" value="#667eea">
+            </div>
+
+            <div class="form-group">
+                <label for="bannerImageFile">Bannière du site *</label>
+                <input type="file" id="bannerImageFile" name="bannerImageFile" accept="image/*" required>
+            </div>
+
+            <div class="form-group">
+                <label for="adminPasswordHash">Mot de passe administrateur *</label>
+                <input type="password" id="adminPasswordHash" th:field="*{adminPasswordHash}" required 
+                       placeholder="Votre mot de passe sécurisé">
+                <div class="password-requirements">
+                    <strong>Le mot de passe doit contenir :</strong>
+                    <ul>
+                        <li>Au moins 8 caractères</li>
+                        <li>Au moins 1 lettre minuscule</li>
+                        <li>Au moins 1 lettre majuscule</li>
+                        <li>Au moins 1 chiffre</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="address">Adresse du restaurant *</label>
+                <input type="text" id="address" th:field="*{address}" required 
+                       placeholder="123 Rue de la Gastronomie, 75001 Paris">
+            </div>
+
+            <div class="form-group">
+                <label for="contactInfo">Informations de contact *</label>
+                <input type="text" id="contactInfo" th:field="*{contactInfo}" required 
+                       placeholder="Tél: 01 23 45 67 89 | Email: contact@restaurant.com">
+            </div>
+
+            <button type="submit">🚀 Configurer le site</button>
+        </form>
+    </div>
+  </body>
+</html>

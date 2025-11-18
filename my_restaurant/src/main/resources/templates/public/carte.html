@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${config.restaurantName + ' - Carte'}">Carte du restaurant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8f9fa;
+            color: #333;
+        }
+
+        header {
+            background: linear-gradient(135deg, [[${config.primaryColor}]], [[${config.primaryColor}]]dd);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .header-content h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .nav-links {
+            margin-top: 20px;
+        }
+
+        .nav-links a {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 10px 20px;
+            background-color: rgba(255,255,255,0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background-color: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .section {
+            background: white;
+            margin-bottom: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .section-header {
+            background: #667eea;
+            color: white;
+            padding: 20px 30px;
+        }
+
+        .section-header h2 {
+            font-size: 1.8em;
+            margin: 0;
+        }
+
+        .section-description {
+            margin-top: 10px;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        .dishes-grid {
+            padding: 30px;
+        }
+
+        .dish-card {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 20px;
+            padding: 20px;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .dish-card:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .dish-info h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .dish-description {
+            color: #666;
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        .dish-allergens {
+            font-size: 0.9em;
+            color: #e74c3c;
+            font-weight: 600;
+        }
+
+        .dish-price {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #667eea;
+            text-align: right;
+            align-self: center;
+        }
+
+        .dish-image {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 10px;
+            grid-column: 3;
+            align-self: center;
+        }
+
+        .no-dishes {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-style: italic;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        @media (max-width: 768px) {
+            .dish-card {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .dish-image {
+                grid-column: 1;
+                width: 100%;
+                height: 200px;
+            }
+
+            .dish-price {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1 th:text="${config.restaurantName}">Nom du restaurant</h1>
+            <p>Notre carte</p>
+            
+            <div class="nav-links">
+                <a href="/">🏠 Accueil</a>
+                <a href="/menus">📋 Menus</a>
+                <a href="/avis">⭐ Avis</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <a href="/" class="back-link">← Retour à l'accueil</a>
+
+        <div th:if="${sections.empty}" class="no-dishes">
+            <h2>Aucune section disponible</h2>
+            <p>La carte sera bientôt disponible.</p>
+        </div>
+
+        <div th:each="section : ${sections}" class="section">
+            <div class="section-header">
+                <h2 th:text="${section.name}">Nom de la section</h2>
+                <div th:if="${section.description}" class="section-description" th:text="${section.description}">Description de la section</div>
+            </div>
+            
+            <div class="dishes-grid">
+                <div th:if="${section.dishes.empty}" class="no-dishes">
+                    <p>Aucun plat dans cette section pour le moment.</p>
+                </div>
+                
+                <div th:each="dish : ${section.dishes}" class="dish-card">
+                    <div class="dish-info">
+                        <h3 th:text="${dish.name}">Nom du plat</h3>
+                        <div class="dish-description" th:text="${dish.description}">Description du plat</div>
+                        <div th:if="${dish.allergens}" class="dish-allergens">
+                            Allergènes: <span th:text="${dish.allergens}">Allergènes</span>
+                        </div>
+                    </div>
+                    
+                    <div class="dish-price" th:text="${#numbers.formatDecimal(dish.price, 1, 2) + ' €'}">Prix</div>
+                    
+                    <img th:if="${dish.imagePath}" th:src="${dish.imagePath}" alt="Photo du plat" class="dish-image">
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

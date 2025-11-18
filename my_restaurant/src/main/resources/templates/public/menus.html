@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${config.restaurantName + ' - Menus'}">Menus</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+
+        header {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                        url('[[${config.bannerImageUrl}]]') center/cover;
+            color: white;
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .header-content h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .nav-links {
+            margin-top: 20px;
+        }
+
+        .nav-links a {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 10px 20px;
+            background-color: [[${config.primaryColor}]];
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .menu-card {
+            background: white;
+            margin-bottom: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .menu-header {
+            background: [[${config.primaryColor}]];
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .menu-header h2 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+
+        .menu-price {
+            font-size: 1.5em;
+            font-weight: 300;
+            opacity: 0.9;
+        }
+
+        .menu-sections {
+            padding: 30px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section-header {
+            border-bottom: 2px solid [[${config.primaryColor}]];
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .section-header h3 {
+            color: [[${config.primaryColor}]];
+            font-size: 1.4em;
+        }
+
+        .dish-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .dish-item:last-child {
+            border-bottom: none;
+        }
+
+        .dish-info h4 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .dish-description {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .dish-allergens {
+            font-size: 0.8em;
+            color: #e74c3c;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+
+        .dish-price {
+            font-weight: bold;
+            color: [[${config.primaryColor}]];
+            font-size: 1.1em;
+        }
+
+        .no-menus {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .no-menus h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background: [[${config.primaryColor}]];
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        @media (max-width: 768px) {
+            .dish-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .dish-price {
+                align-self: flex-end;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1 th:text="${config.restaurantName}">Nom du restaurant</h1>
+            <p>Nos menus</p>
+            
+            <div class="nav-links">
+                <a href="/">🏠 Accueil</a>
+                <a href="/carte">🍽️ Carte</a>
+                <a href="/avis">⭐ Avis</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <a href="/" class="back-link">← Retour à l'accueil</a>
+
+        <div th:if="${menus.empty}" class="no-menus">
+            <h2>Aucun menu disponible</h2>
+            <p>Nos menus seront bientôt disponibles. En attendant, découvrez notre carte !</p>
+        </div>
+
+        <div th:each="menu : ${menus}" class="menu-card">
+            <div class="menu-header">
+                <h2 th:text="${menu.name}">Nom du menu</h2>
+                <div class="menu-price" th:text="${#numbers.formatDecimal(menu.price, 1, 2) + ' €'}">Prix du menu</div>
+            </div>
+            
+            <div class="menu-sections">
+                <div th:each="section : ${menu.sections}" class="section">
+                    <div class="section-header">
+                        <h3 th:text="${section.name}">Nom de la section</h3>
+                    </div>
+                    
+                    <div th:if="${#lists.isEmpty(section.dishes)}" class="no-dishes">
+                        <p style="color: #666; font-style: italic;">Aucun plat dans cette section pour le moment.</p>
+                    </div>
+                    
+                    <div th:each="dish : ${section.dishes}" class="dish-item">
+                        <div class="dish-info">
+                            <h4 th:text="${dish.name}">Nom du plat</h4>
+                            <div class="dish-description" th:text="${dish.description}">Description du plat</div>
+                            <div th:if="${dish.allergens}" class="dish-allergens">
+                                Allergènes: <span th:text="${dish.allergens}">Allergènes</span>
+                            </div>
+                        </div>
+                        
+                        <div class="dish-price" th:text="${#numbers.formatDecimal(dish.price, 1, 2) + ' €'}">Prix</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

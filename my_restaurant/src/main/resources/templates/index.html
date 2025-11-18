@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Configuration du site</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <script src="/js/script.js"></script>
+  </head>
+  <body>
+    <h1>Configuration initiale du restaurant</h1>
+
+    <form th:action="@{/setup}" th:object="${config}" method="post">
+      <div>
+        <label for="restaurantName">Nom du restaurant :</label>
+        <input
+          type="text"
+          id="restaurantName"
+          th:field="*{restaurantName}"
+          required
+        />
+      </div>
+
+      <div>
+        <label for="siteUrl">URL du site :</label>
+        <input type="text" id="siteUrl" th:field="*{siteUrl}" required />
+      </div>
+
+      <div>
+        <label for="themeColor">Couleur du thème (ex: #ff9900) :</label>
+        <input type="color" id="themeColor" th:field="*{themeColor}" />
+      </div>
+
+      <div>
+        <label for="adminPasswordHash">Mot de passe administrateur :</label>
+        <input
+          type="password"
+          id="adminPasswordHash"
+          th:field="*{adminPasswordHash}"
+          placeholder="8+ caractères, 1 majuscule, 1 chiffre"
+          required
+        />
+      </div>
+
+      <div>
+        <label for="address">Adresse :</label>
+        <input type="text" id="address" th:field="*{address}" />
+      </div>
+
+      <div>
+        <label for="contactInfo">Informations de contact :</label>
+        <input type="text" id="contactInfo" th:field="*{contactInfo}" />
+      </div>
+
+      <button type="submit">Enregistrer la configuration</button>
+    </form>
+  </body>
+</html>

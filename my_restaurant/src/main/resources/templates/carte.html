@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Carte du restaurant</title>
+  </head>
+  <body>
+    <h1>Notre carte</h1>
+
+    <th:block th:each="section : ${sections}">
+      <h2 th:text="${section.name}"></h2>
+      <ul>
+        <th:block th:each="dish : ${section.dishes}">
+          <li>
+            <strong th:text="${dish.name}"></strong> –
+            <span th:text="${dish.price} + ' €'"></span><br />
+            <small th:text="${dish.description}"></small><br />
+            <span th:if="${dish.imagePath}">
+              <img
+                th:src="@{${dish.imagePath}}"
+                alt="image"
+                width="100"
+              /> </span
+            ><br /><br />
+          </li>
+        </th:block>
+      </ul>
+    </th:block>
+  </body>
+</html>

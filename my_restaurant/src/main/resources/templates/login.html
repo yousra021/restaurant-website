@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head><title>Connexion Admin</title></head>
+<body>
+<h2>Connexion Admin</h2>
+<form method="post" action="/admin/login">
+    <label>Nom du restaurant : <input type="text" name="restaurantName" required></label><br>
+    <label>Mot de passe : <input type="password" name="password" required></label><br>
+    <button type="submit">Connexion</button>
+</form>
+<p style="color:red;">[[${error}]]</p>
+</body>
+</html>
